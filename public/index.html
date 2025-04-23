@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Bot Token Checker</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzYwYTVmYSI+PHBhdGggZD0iTTIwLjMxNyA0LjM3YTE5Ljc5MSAxOS43OTEgMCAwIDAtNC44ODUtMS41MTUuMDc0LjA3NCAwIDAgMC0uMDc5LjAzN2MtLjIxLjM3NS0uNDQ0Ljg2NC0uNjA4IDEuMjVhMTguMjcgMTguMjcgMCAwIDAtNS40ODcgMCAxMi42NCAxMi42NCAwIDAgMC0uNjE3LTEuMjUuMDc3LjA3NyAwIDAgMC0uMDc5LS4wMzdBMTkuNzM2IDE5LjczNiAwIDAgMCAzLjY3NyA0LjM3LjA3LjA3IDAgMCAwIDMuNjQ1IDQuMzk3Qy41MzMgOS4wNDYtLjMyIDEzLjU4LjA5OSAxOC4wNTdhLjA4Mi4wODIgMCAwIDAgLjAzMS4wNTcgMTkuOSAxOS45IDAgMCAwIDUuOTkzIDMuMDMuMDc4LjA3OCAwIDAgMCAuMDg0LS4wMjhjLjQ2Mi0uNjMuODc0LTEuMjk1IDEuMjI2LTEuOTk0YS4wNzYuMDc2IDAgMCAwLS4wNDEtLjEwNiAxMy4xMDcgMTMuMTA3IDAgMCAxLTEuODcyLS44OTIuMDc3LjA3NyAwIDAgMS0uMDA4LS4xMjggMTAuMiAxMC4yIDAgMCAwIC4zNzItLjI5Mi4wNzQuMDc0IDAgMCAxIC4wNzctLjAxYzMuOTI4IDEuNzkzIDguMTggMS43OTMgMTIuMDYyIDBhLjA3NC4wNzQgMCAwIDEgLjA3OC4wMWMuMTIuMDk4LjI0Ni4xOTguMzczLjI5MmEuMDc3LjA3NyAwIDAgMS0uMDA2LjEyNyAxMi4yOTkgMTIuMjk5IDAgMCAxLTEuODczLjg5Mi4wNzcuMDc3IDAgMCAwLS4wNDEuMTA3Yy4zNi42OTguNzcyIDEuMzYyIDEuMjI1IDEuOTkzYS4wNzYuMDc2IDAgMCAwIC4wODQuMDI4IDE5LjgzOSAxOS44MzkgMCAwIDAgNi4wMDItMy4wMy4wNzcuMDc3IDAgMCAwIC4wMzItLjA1NGMuNS01LjE3Ny0uODM4LTkuNjc0LTMuNTQ5LTEzLjY2YS4wNjEuMDYxIDAgMCAwLS4wMzEtLjAzek04LjAyIDE1LjMzYy0xLjE4MyAwLTIuMTU3LTEuMDg1LTIuMTU3LTIuNDE5IDAtMS4zMzMuOTU2LTIuNDE5IDIuMTU3LTIuNDE5IDEuMjEgMCAyLjE3NiAxLjA5NiAyLjE1NyAyLjQyIDAgMS4zMzMtLjk1NiAyLjQxOC0yLjE1NyAyLjQxOHptNy45NzUgMGMtMS4xODMgMC0yLjE1Ny0xLjA4NS0yLjE1Ny0yLjQxOSAwLTEuMzMzLjk1NS0yLjQxOSAyLjE1Ny0yLjQxOSAxLjIxIDAgMi4xNzYgMS4wOTYgMi4xNTcgMi40MiAwIDEuMzMzLS45NDYgMi40MTgtMi4xNTcgMi40MTh6Ij48L3BhdGg+PC9zdmc+">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1c2c 0%, #2a2d43 100%);
+        }
+        
+        .loading {
+            display: none;
+        }
+        .loading.active {
+            display: block;
+        }
+        .result-section {
+            display: none;
+        }
+        .result-section.active {
+            display: block;
+        }
+        .guild-card {
+            transition: transform 0.2s ease-in-out;
+        }
+        .guild-card:hover {
+            transform: translateY(-4px);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .dark-input {
+            background: rgba(17, 19, 31, 0.8);
+            color: #fff;
+            caret-color: #60a5fa;
+        }
+        .dark-input::placeholder {
+            color: rgba(156, 163, 175, 0.6);
+        }
+        .dark-input:focus {
+            background: rgba(17, 19, 31, 0.95);
+            box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
+        }
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .badge-blue {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .badge-purple {
+            background: rgba(147, 51, 234, 0.2);
+            color: #c084fc;
+            border: 1px solid rgba(147, 51, 234, 0.3);
+        }
+        .badge-green {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen py-12 px-4">
+    <div class="container mx-auto max-w-4xl">
+        <div class="text-center mb-12">
+            <div class="flex justify-center mb-6">
+                <div class="w-64 h-24 relative">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-lg transform rotate-1 opacity-75"></div>
+                    <div class="absolute inset-0 bg-gray-900 rounded-xl flex items-center justify-center">
+                        <div class="flex items-center">
+                            <svg class="w-14 h-14 text-blue-400 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path>
+                            </svg>
+                            <div class="text-left">
+                                <div class="text-xl font-bold text-blue-400">Discord</div>
+                                <div class="text-sm text-gray-400">Token Checker</div>
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-1 -right-1 bg-green-400 w-4 h-4 rounded-full border-2 border-gray-900"></div>
+                    </div>
+                </div>
+            </div>
+            <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
+                Discord Bot Token Checker
+            </h1>
+            <p class="text-gray-400 mb-3">Validate your bot token and view detailed information</p>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 mt-4">
+                <div class="badge badge-green flex items-center">
+                    <i class="fas fa-shield-alt mr-2"></i>
+                    <span>100% Private - Your tokens are never stored or logged</span>
+                </div>
+                <a href="https://github.com/NAT2K15/discord-token-checker" target="_blank" class="badge badge-blue flex items-center hover:bg-blue-500/30 transition-colors">
+                    <i class="fab fa-github mr-2"></i>
+                    <span>View on GitHub</span>
+                </a>
+                <div class="badge badge-purple flex items-center">
+                    <i class="fas fa-code mr-2"></i>
+                    <span>Created by NAT2K15 Development</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="glass-effect rounded-xl p-8 shadow-2xl mb-8">
+            <div class="mb-6">
+                <label for="token" class="block text-sm font-medium mb-2 text-gray-300">Bot Token</label>
+                <div class="relative">
+                    <input type="password" id="token" 
+                           class="w-full px-4 py-3 rounded-lg dark-input border border-gray-700/50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 focus:outline-none transition-all duration-200" 
+                           placeholder="Enter your bot token">
+                    <button onclick="togglePassword()" 
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <button onclick="checkToken()" 
+                    class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
+                <i class="fas fa-search mr-2"></i>Check Token
+            </button>
+            
+            <div id="loading" class="loading mt-6 text-center">
+                <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-blue-500 border-t-transparent"></div>
+                <p class="mt-3 text-gray-400">Checking token...</p>
+            </div>
+        </div>
+        
+        <div id="result" class="result-section space-y-8">
+            <div id="error" class="hidden bg-red-500/20 border border-red-500/50 text-red-400 p-4 rounded-lg"></div>
+            
+            <div id="bot-info" class="hidden space-y-8">
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="flex items-center mb-6">
+                        <img id="bot-avatar" class="w-20 h-20 rounded-full mr-6 bg-gray-700" src="" alt="Bot Avatar">
+                        <div class="flex-grow">
+                            <div class="flex items-center gap-3 mb-2">
+                                <h2 id="bot-username" class="text-2xl font-bold"></h2>
+                                <span id="bot-verified-badge" class="hidden badge badge-blue">
+                                    <i class="fas fa-check-circle"></i> Verified
+                                </span>
+                            </div>
+                            <p id="bot-id" class="text-gray-400"></p>
+                            <div class="flex flex-wrap gap-2 mt-2" id="bot-badges"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-gray-800/50 rounded-lg p-4">
+                            <p class="text-sm text-gray-400 mb-1">Created</p>
+                            <p id="bot-created" class="font-medium"></p>
+                            <p id="bot-age" class="text-xs text-gray-500 mt-1"></p>
+                        </div>
+                        <div class="bg-gray-800/50 rounded-lg p-4">
+                            <p class="text-sm text-gray-400 mb-1">Application Info</p>
+                            <p id="bot-app-info" class="font-medium"></p>
+                        </div>
+                        <div class="bg-gray-800/50 rounded-lg p-4">
+                            <p class="text-sm text-gray-400 mb-1">Servers</p>
+                            <p id="guild-count" class="font-medium"></p>
+                            <p id="total-members" class="text-xs text-gray-500 mt-1"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold flex items-center">
+                            <i class="fas fa-server mr-2"></i>Servers
+                        </h3>
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="text-gray-400">Sort by:</span>
+                            <select id="sort-guilds" onchange="sortGuilds()" class="dark-input rounded-lg px-2 py-1 text-sm border border-gray-700/50">
+                                <option value="members">Members</option>
+                                <option value="name">Name</option>
+                                <option value="id">ID</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="guilds" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentBotData = null;
+
+        function togglePassword() {
+            const input = document.getElementById('token');
+            const icon = document.querySelector('button i.fas');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        function getTimeDifference(date) {
+            const now = new Date();
+            const diff = now - date;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const years = Math.floor(days / 365);
+            const months = Math.floor((days % 365) / 30);
+            
+            if (years > 0) {
+                return `${years} year${years > 1 ? 's' : ''} ${months} month${months > 1 ? 's' : ''} old`;
+            } else if (months > 0) {
+                return `${months} month${months > 1 ? 's' : ''} old`;
+            } else {
+                return `${days} day${days > 1 ? 's' : ''} old`;
+            }
+        }
+
+        async function checkToken() {
+            const tokenInput = document.getElementById('token');
+            const token = tokenInput.value;
+            if (!token) {
+                showError('Please enter a token');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('result').classList.remove('active');
+            document.getElementById('error').classList.add('hidden');
+            document.getElementById('bot-info').classList.add('hidden');
+
+            try {
+                const response = await fetch('/check_token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ token }),
+                });
+
+                const data = await response.json();
+                
+                // Hide loading
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('result').classList.add('active');
+
+                if (!data.valid) {
+                    showError(data.error || 'Invalid token');
+                    return;
+                }
+
+                // Clear input after successful check
+                tokenInput.value = '';
+                
+                // Store the data globally
+                currentBotData = data.data;
+                
+                // Display bot information
+                displayBotInfo(data.data);
+            } catch (error) {
+                showError('An error occurred while checking the token');
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.innerHTML = `<i class="fas fa-exclamation-circle mr-2"></i>${message}`;
+            errorDiv.classList.remove('hidden');
+            document.getElementById('result').classList.add('active');
+        }
+
+        function displayBotInfo(botData) {
+            document.getElementById('bot-info').classList.remove('hidden');
+            
+            // Set avatar
+            const avatarImg = document.getElementById('bot-avatar');
+            avatarImg.src = botData.avatar_url || 'https://cdn.discordapp.com/embed/avatars/0.png';
+            
+            // Set basic info
+            document.getElementById('bot-username').textContent = botData.username;
+            document.getElementById('bot-id').textContent = `ID: ${botData.id}`;
+            
+            // Set creation date and age
+            const createdDate = new Date(botData.created_at);
+            document.getElementById('bot-created').textContent = createdDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('bot-age').textContent = getTimeDifference(createdDate);
+
+            // Set verification badge
+            const verifiedBadge = document.getElementById('bot-verified-badge');
+            if (botData.is_verified) {
+                verifiedBadge.classList.remove('hidden');
+            } else {
+                verifiedBadge.classList.add('hidden');
+            }
+
+            // Set badges
+            const badgesContainer = document.getElementById('bot-badges');
+            badgesContainer.innerHTML = '';
+            
+            // Add bot badge
+            if (botData.is_bot) {
+                badgesContainer.innerHTML += `
+                    <span class="badge badge-purple">
+                        <i class="fas fa-robot"></i> Bot
+                    </span>
+                `;
+            }
+
+            // Set guild count and total members
+            const totalMembers = botData.guilds.reduce((acc, guild) => acc + guild.member_count, 0);
+            document.getElementById('guild-count').textContent = `${botData.guilds.length} servers`;
+            document.getElementById('total-members').textContent = `${totalMembers.toLocaleString()} total members`;
+
+            // Set application info
+            document.getElementById('bot-app-info').innerHTML = `
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-fingerprint text-blue-400"></i>
+                        <span class="text-sm">${botData.id}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-shield-alt text-green-400"></i>
+                        <span class="text-sm">${botData.is_verified ? 'Verified Bot' : 'Unverified Bot'}</span>
+                    </div>
+                </div>
+            `;
+
+            // Display guilds
+            displayGuilds(botData.guilds);
+        }
+
+        function displayGuilds(guilds) {
+            const guildsContainer = document.getElementById('guilds');
+            guildsContainer.innerHTML = '';
+
+            guilds.forEach(guild => {
+                const guildElement = document.createElement('div');
+                guildElement.className = 'guild-card glass-effect rounded-lg p-4 flex items-center space-x-4';
+                
+                const iconUrl = guild.icon_url || 'https://cdn.discordapp.com/embed/avatars/0.png';
+                
+                guildElement.innerHTML = `
+                    <img src="${iconUrl}" alt="${guild.name}" class="w-12 h-12 rounded-full bg-gray-700 flex-shrink-0">
+                    <div class="flex-grow min-w-0">
+                        <h4 class="font-semibold text-white truncate">${guild.name}</h4>
+                        <div class="flex items-center text-sm text-gray-400 space-x-3">
+                            <span><i class="fas fa-users mr-1"></i>${guild.member_count.toLocaleString()}</span>
+                            <span class="truncate"><i class="fas fa-fingerprint mr-1"></i>${guild.id}</span>
+                        </div>
+                        ${guild.features.length > 0 ? `
+                            <div class="flex flex-wrap gap-1 mt-2">
+                                ${guild.features.slice(0, 3).map(feature => `
+                                    <span class="badge badge-green text-xs">
+                                        <i class="fas fa-star"></i> ${feature.toLowerCase().replace(/_/g, ' ')}
+                                    </span>
+                                `).join('')}
+                                ${guild.features.length > 3 ? `
+                                    <span class="badge badge-blue text-xs">
+                                        +${guild.features.length - 3} more
+                                    </span>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                guildsContainer.appendChild(guildElement);
+            });
+        }
+
+        function sortGuilds() {
+            if (!currentBotData) return;
+            
+            const sortBy = document.getElementById('sort-guilds').value;
+            const guilds = [...currentBotData.guilds];
+            
+            switch (sortBy) {
+                case 'members':
+                    guilds.sort((a, b) => b.member_count - a.member_count);
+                    break;
+                case 'name':
+                    guilds.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'id':
+                    guilds.sort((a, b) => a.id.localeCompare(b.id));
+                    break;
+            }
+            
+            displayGuilds(guilds);
+        }
+
+        // Add enter key support
+        document.getElementById('token').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkToken();
+            }
+        });
+    </script>
+</body>
+</html> 
