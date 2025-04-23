@@ -1,5 +1,6 @@
 # Discord Bot Token Checker
-https://token.nat2k15.xyz
+
+
 A modern web application for validating Discord bot tokens and viewing detailed information about bots and their servers. Built with Node.js and modern web technologies.
 
 ![Discord Bot Token Checker](https://i.imgur.com/QAf7XRR.png)
